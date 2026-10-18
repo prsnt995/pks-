@@ -269,7 +269,8 @@ export default function Navbar() {
                 >
                   {/* Company Name Button */}
                   <Link
-                    href={pathname === '/' ? `/#${co.slug}` : `/companies/${co.slug}`}
+                    href={`/companies/${co.slug}`}
+                    onClick={() => setActiveDropdown(null)}
                     className={`group/btn flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-200 ${
                       isCurrentCompany
                         ? 'text-white bg-white/15 border border-white/20 shadow-sm'
@@ -300,7 +301,11 @@ export default function Navbar() {
 
                         {/* Company Header */}
                         <div className="flex items-start justify-between gap-2 mb-2">
-                          <div className="flex items-center gap-2">
+                          <Link
+                            href={`/companies/${co.slug}`}
+                            onClick={() => setActiveDropdown(null)}
+                            className="flex items-center gap-2 group/hdr hover:opacity-80 transition-opacity"
+                          >
                             <div
                               className="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-bold flex-shrink-0"
                               style={{
@@ -312,7 +317,7 @@ export default function Navbar() {
                               {co.name.substring(0, 2).toUpperCase()}
                             </div>
                             <div>
-                              <h4 className="text-xs font-bold text-white tracking-wide">
+                              <h4 className="text-xs font-bold text-white tracking-wide group-hover/hdr:underline">
                                 {co.name}
                               </h4>
                               <p
@@ -322,7 +327,7 @@ export default function Navbar() {
                                 {coCategory}
                               </p>
                             </div>
-                          </div>
+                          </Link>
                         </div>
 
                         {/* Description */}

@@ -1,7 +1,8 @@
 'use client';
 
+import Link from 'next/link';
 import { useLanguage } from '@/context/LanguageContext';
-import { ArrowDown, Target } from 'lucide-react';
+import { ArrowRight, Target } from 'lucide-react';
 
 interface HeroSectionProps {
   headline?: string;
@@ -121,20 +122,20 @@ export default function HeroSection({
         </p>
 
         {/* CTA Button */}
-        <a
-          href="#rozena"
+        <Link
+          href="/companies/rozena"
           className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-full bg-white text-black hover:bg-zinc-200 transition-all text-xs font-semibold tracking-wider uppercase shadow-[0_4px_24px_rgba(255,255,255,0.15)] hover:scale-105 active:scale-95"
         >
           <span>{copy.explore}</span>
-          <ArrowDown className="w-3.5 h-3.5 text-black transition-transform group-hover:translate-y-0.5" />
-        </a>
+          <ArrowRight className="w-3.5 h-3.5 text-black transition-transform group-hover:translate-x-0.5" />
+        </Link>
 
         {/* Bottom 4 Ventures Grid */}
         <div className="w-full max-w-4xl mt-16 sm:mt-20 pt-8 border-t border-white/10 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-left">
           {VENTURES.map((v) => (
-            <a
+            <Link
               key={v.slug}
-              href={`#${v.slug}`}
+              href={`/companies/${v.slug}`}
               className="group block transition-transform hover:-translate-y-0.5"
             >
               <p className="text-[10px] font-mono tracking-widest text-zinc-500 uppercase mb-1">
@@ -143,7 +144,7 @@ export default function HeroSection({
               <p className="text-xs font-medium text-zinc-300 group-hover:text-white transition-colors">
                 {v.name} — <span className="text-zinc-400 group-hover:text-zinc-300">{VENTURE_TAGS[v.slug]?.[language] || 'Specialized Venture'}</span>
               </p>
-            </a>
+            </Link>
           ))}
         </div>
       </div>

@@ -1,7 +1,6 @@
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import HeroSection from '@/components/home/HeroSection';
-import CompanyVideoShowcase from '@/components/home/CompanyVideoShowcase';
 import { getCompanies, getSiteSettings } from '@/lib/db';
 
 export default async function HomePage() {
@@ -22,9 +21,6 @@ export default async function HomePage() {
           subheadline={settings.hero_subheadline}
           description={settings.hero_description}
         />
-
-        {/* Cinematic Video Showcase for the 4 Companies */}
-        <CompanyVideoShowcase />
       </main>
 
       <Footer companies={activeCompanies} />

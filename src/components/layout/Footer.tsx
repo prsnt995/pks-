@@ -113,7 +113,7 @@ export default function Footer({ companies }: FooterProps) {
             </h4>
             <ul className="space-y-2.5 text-xs">
               <li>
-                <Link href="/#showcase" className="hover:text-white transition-colors">
+                <Link href="/companies/rozena" className="hover:text-white transition-colors">
                   {labels.directory}
                 </Link>
               </li>
@@ -123,8 +123,21 @@ export default function Footer({ companies }: FooterProps) {
 
         {/* Bottom Legal Notice */}
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-zinc-500">
-          <div>
-            &copy; {currentYear} NEXORA GROUP. {labels.rights}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3 text-center md:text-left">
+            <span>&copy; {currentYear} NEXORA GROUP. {labels.rights}</span>
+            <span className="hidden sm:inline text-zinc-600">·</span>
+            <span className="text-zinc-400">
+              Developed by{' '}
+              <a
+                href="https://www.noeulenterprises.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-zinc-200 hover:text-white font-medium underline decoration-white/20 underline-offset-4 hover:decoration-white transition-colors inline-flex items-center gap-0.5"
+              >
+                <span>NOEUL ENTERPRISES</span>
+                <ArrowUpRight className="w-3 h-3 text-zinc-400 inline" />
+              </a>
+            </span>
           </div>
           <div className="flex items-center gap-6">
             <Link href="/privacy" className="hover:text-zinc-300 transition-colors">
