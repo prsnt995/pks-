@@ -12,9 +12,6 @@ import {
   CheckCircle2, 
   ArrowUpRight, 
   ShoppingBag, 
-  MapPin, 
-  Mail, 
-  Phone, 
   Calendar,
   ChevronRight
 } from 'lucide-react';
@@ -692,42 +689,21 @@ export default async function CompanyDetailPage({
             <div className="p-8 sm:p-12 rounded-3xl bg-[#0E1117] border border-white/10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
               <div className="space-y-4 max-w-2xl">
                 <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-500">
-                  Business Collaboration & Inquiries
+                  Official Venture Portal
                 </span>
                 <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-                  Connect with {company.name}
+                  Experience {company.name}
                 </h3>
                 <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-                  Interested in enterprise partnerships, creative commissions, commercial licensing, or platform integration? Connect directly with the venture management team.
+                  Discover more about {company.name}&apos;s products, services, and creative platforms on their official web destination.
                 </p>
 
-                {/* Company details list */}
-                <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-zinc-300">
-                  {company.location && (
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-3.5 h-3.5 text-zinc-500" />
-                      <span>{company.location}</span>
-                    </div>
-                  )}
-                  {company.contact_email && (
-                    <div className="flex items-center gap-2">
-                      <Mail className="w-3.5 h-3.5 text-zinc-500" />
-                      <span>{company.contact_email}</span>
-                    </div>
-                  )}
-                  {company.contact_phone && (
-                    <div className="flex items-center gap-2">
-                      <Phone className="w-3.5 h-3.5 text-zinc-500" />
-                      <span>{company.contact_phone}</span>
-                    </div>
-                  )}
-                  {company.founded_year && (
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-3.5 h-3.5 text-zinc-500" />
-                      <span>Est. {company.founded_year}</span>
-                    </div>
-                  )}
-                </div>
+                {company.founded_year && (
+                  <div className="pt-2 flex items-center gap-2 text-xs text-zinc-400">
+                    <Calendar className="w-3.5 h-3.5 text-zinc-500" />
+                    <span>Est. {company.founded_year}</span>
+                  </div>
+                )}
               </div>
 
               <div className="flex-shrink-0">
