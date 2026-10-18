@@ -12,12 +12,14 @@ const mockProvider = new MockVideoProvider();
 export function getProvider(name?: string): IVideoProvider {
   const chosen = (name || process.env.VIDEO_PROVIDER || '').toLowerCase();
 
-  if (chosen === 'luma') {
-    if (lumaProvider.isConfigured()) return lumaProvider;
-  } else if (chosen === 'fal') {
-    if (falProvider.isConfigured()) return falProvider;
-  } else if (chosen === 'replicate') {
-    if (replicateProvider.isConfigured()) return replicateProvider;
+  if (chosen) {
+    const providers: Record<string, IVideoProvider> = {
+      luma: lumaProvider, fal: falProvider, replicate: replicateProvider, mock: mockProvider
+    };
+    const provider = providers[chosen];
+    if (!provider) throw new Error(`Unknown video provider: ${chosen}`);
+    if (!provider.isConfigured()) throw new Error(`Video provider ${chosen} is not configured.`);
+    return provider;
   }
 
   // Auto-detect if provider not explicitly matching configured keys

@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { randomUUID } from 'crypto';
 import {
   Company,
   Project,
@@ -45,10 +46,13 @@ function readJsonFile<T>(filename: string, defaultValue: T): T {
 function writeJsonFile<T>(filename: string, data: T): void {
   ensureDataDir();
   const filePath = path.join(DATA_DIR, filename);
+  const temporaryPath = `${filePath}.${randomUUID()}.tmp`;
   try {
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
+    fs.writeFileSync(temporaryPath, JSON.stringify(data, null, 2), 'utf-8');
+    fs.renameSync(temporaryPath, filePath);
   } catch (err) {
-    console.error(`Error writing ${filename}:`, err);
+    if (fs.existsSync(temporaryPath)) fs.unlinkSync(temporaryPath);
+    throw err;
   }
 }
 
@@ -73,7 +77,7 @@ export async function getCompanies(): Promise<Company[]> {
         .from('companies')
         .select('*')
         .order('display_order', { ascending: true });
-      if (!error && data && data.length > 0) return data as Company[];
+      if (!error && data) return data as Company[];
     } catch {
       // Fallback to local storage
     }
@@ -173,7 +177,7 @@ export async function getProjects(): Promise<Project[]> {
   if (supabase) {
     try {
       const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
-      if (!error && data && data.length > 0) return data as Project[];
+      if (!error && data) return data as Project[];
     } catch {
       // Fallback
     }
@@ -230,7 +234,7 @@ export async function getVideos(): Promise<Video[]> {
   if (supabase) {
     try {
       const { data, error } = await supabase.from('videos').select('*').order('created_at', { ascending: false });
-      if (!error && data && data.length > 0) return data as Video[];
+      if (!error && data) return data as Video[];
     } catch {
       // Fallback
     }

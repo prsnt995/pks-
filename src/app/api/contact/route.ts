@@ -112,7 +112,8 @@ export async function PATCH(req: Request) {
       return NextResponse.json({ error: 'Invalid parameters.' }, { status: 400 });
     }
 
-    await updateContactMessageStatus(id, status);
+    const updated = await updateContactMessageStatus(id, status);
+    if (!updated) return NextResponse.json({ error: 'Message not found.' }, { status: 404 });
     return NextResponse.json({ success: true });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : 'Update failed';

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, useTransition } from 'react';
+import React, { createContext, useContext, useEffect, useSyncExternalStore } from 'react';
 
 export type LanguageCode = 'en' | 'ko' | 'zh';
 
@@ -29,51 +29,54 @@ const LanguageContext = createContext<LanguageContextType>({
   mounted: false,
 });
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<LanguageCode>('en');
-  const [mounted, setMounted] = useState(false);
-  const [, startTransition] = useTransition();
+let currentLanguage: LanguageCode = 'en';
 
-  useEffect(() => {
-    setMounted(true);
-    try {
-      const saved = localStorage.getItem('psk-language') as LanguageCode | null;
-      if (saved && (saved === 'en' || saved === 'ko' || saved === 'zh')) {
-        setLanguageState(saved);
-        document.documentElement.lang = saved === 'ko' ? 'ko' : saved === 'zh' ? 'zh-CN' : 'en';
-      }
-    } catch {
-      // storage unavailable
-    }
+function readLanguage(): LanguageCode {
+  try {
+    const saved = localStorage.getItem('psk-language');
+    if (saved === 'en' || saved === 'ko' || saved === 'zh') return saved;
+  } catch {
+    // Keep the in-memory selection when browser storage is unavailable.
+  }
+  return currentLanguage;
+}
 
-    const handleExternalChange = () => {
-      try {
-        const next = localStorage.getItem('psk-language') as LanguageCode | null;
-        if (next && (next === 'en' || next === 'ko' || next === 'zh')) {
-          setLanguageState(next);
-          document.documentElement.lang = next === 'ko' ? 'ko' : next === 'zh' ? 'zh-CN' : 'en';
-        }
-      } catch {
-        // storage unavailable
-      }
-    };
-
-    window.addEventListener('psk-language-change', handleExternalChange);
-    return () => window.removeEventListener('psk-language-change', handleExternalChange);
-  }, []);
-
-  const setLanguage = (newLang: LanguageCode) => {
-    startTransition(() => {
-      setLanguageState(newLang);
-    });
-    try {
-      localStorage.setItem('psk-language', newLang);
-      document.documentElement.lang = newLang === 'ko' ? 'ko' : newLang === 'zh' ? 'zh-CN' : 'en';
-      window.dispatchEvent(new Event('psk-language-change'));
-    } catch {
-      // storage unavailable
+function subscribe(onChange: () => void) {
+  const onStorage = (event: StorageEvent) => {
+    if (event.key === 'psk-language' || event.key === null) {
+      currentLanguage = 'en';
+      onChange();
     }
   };
+  window.addEventListener('storage', onStorage);
+  window.addEventListener('psk-language-change', onChange);
+  return () => {
+    window.removeEventListener('storage', onStorage);
+    window.removeEventListener('psk-language-change', onChange);
+  };
+}
+
+const serverLanguage = (): LanguageCode => 'en';
+const clientMounted = () => true;
+const serverMounted = () => false;
+
+function setLanguage(newLang: LanguageCode) {
+  currentLanguage = newLang;
+  try {
+    localStorage.setItem('psk-language', newLang);
+  } catch {
+    // The selection still works for this page session.
+  }
+  window.dispatchEvent(new Event('psk-language-change'));
+}
+
+export function LanguageProvider({ children }: { children: React.ReactNode }) {
+  const language = useSyncExternalStore(subscribe, readLanguage, serverLanguage);
+  const mounted = useSyncExternalStore(subscribe, clientMounted, serverMounted);
+
+  useEffect(() => {
+    document.documentElement.lang = language === 'zh' ? 'zh-CN' : language;
+  }, [language]);
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, mounted }}>

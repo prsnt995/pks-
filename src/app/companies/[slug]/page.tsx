@@ -1,5 +1,8 @@
+export const dynamic = 'force-dynamic';
+
 import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import { getCompanies, getCompanyBySlug, getProjects } from '@/lib/db';
@@ -16,16 +19,6 @@ import {
   ChevronRight
 } from 'lucide-react';
 import type { Metadata } from 'next';
-
-export async function generateStaticParams() {
-  return [
-    { slug: 'rozena' },
-    { slug: 'damgara' },
-    { slug: 'nextep' },
-    { slug: 'noeul' },
-    { slug: 'nextepstudio' },
-  ];
-}
 
 export async function generateMetadata({
   params
@@ -142,7 +135,10 @@ export default async function CompanyDetailPage({
           {/* Subtle Ambient Background Media */}
           <div className="absolute inset-0 opacity-20 pointer-events-none">
             {company.hero_image_url && (
-              <img
+              <Image
+                fill
+                unoptimized
+                sizes="(max-width: 768px) 100vw, 50vw"
                 src={company.hero_image_url}
                 alt={`${company.name} hero background`}
                 className="w-full h-full object-cover filter blur-sm scale-105"
@@ -629,7 +625,10 @@ export default async function CompanyDetailPage({
                     className="group rounded-2xl overflow-hidden bg-[#0E1117] border border-white/10 hover:border-white/25 transition-all duration-300 flex flex-col justify-between"
                   >
                     <div className="h-64 relative bg-zinc-950 overflow-hidden">
-                      <img
+                      <Image
+                fill
+                unoptimized
+                sizes="(max-width: 768px) 100vw, 50vw"
                         src={p.image_url}
                         alt={p.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80 group-hover:opacity-90"

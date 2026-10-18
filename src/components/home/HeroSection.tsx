@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLanguage } from '@/context/LanguageContext';
 import { ArrowRight, Target } from 'lucide-react';
 
@@ -86,7 +87,11 @@ export default function HeroSection({
     <section className="relative min-h-[92vh] flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8 pt-32 pb-20 overflow-hidden bg-[#050505]">
       {/* Background circuit board image & dark atmospheric vignette */}
       <div className="absolute inset-0 z-0 pointer-events-none select-none overflow-hidden">
-        <img
+        <Image
+          fill
+          unoptimized
+          sizes="100vw"
+          loading="eager"
           src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=2400&q=85"
           alt=""
           className="w-full h-full object-cover object-center opacity-25 contrast-125 grayscale"

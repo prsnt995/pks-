@@ -18,7 +18,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     }
 
     // If job is already finalized (completed or failed), return current state
-    if (job.status === 'completed' && job.result_video_url) {
+    if (job.status === 'failed' || (job.status === 'completed' && job.result_video_url)) {
       return NextResponse.json({ job });
     }
 
