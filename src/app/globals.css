@@ -1,26 +1,96 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #08090a;
+  --foreground: #f8fafc;
+  --surface: #0e1117;
+  --surface-raised: #151921;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.16);
+  --silver-glow: rgba(226, 232, 240, 0.08);
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #08090a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}
+
+/* Ambient Subtle Grid */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+.radial-fade {
+  mask-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 75%);
+}
+
+/* Glassmorphism Card Surface */
+.glass-panel {
+  background: rgba(15, 17, 21, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+}
+
+.glass-panel:hover {
+  border-color: var(--border-medium);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Homepage-only futuristic AI visual language */
+.ai-grid { background-image: linear-gradient(rgba(122,150,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(122,150,255,.07) 1px,transparent 1px); background-size: 56px 56px; mask-image: linear-gradient(to bottom,black,transparent 95%); }
+.ai-gradient-text { background: linear-gradient(100deg,#b6a0ff 5%,#88baff 48%,#76f2ee 95%); background-clip: text; -webkit-background-clip:text; color:transparent; }
+.ai-glass { background:linear-gradient(135deg,rgba(38,44,92,.55),rgba(6,12,30,.85) 65%,rgba(15,70,87,.25)); backdrop-filter:blur(18px); }
+@keyframes ai-drift { 0%,100% { transform:translate3d(0,0,0) } 50% { transform:translate3d(25px,-25px,0) } }
+@keyframes ai-spin { to { transform:rotate(360deg) } }
+@keyframes ai-breathe { 50% { transform:scale(1.055); filter:brightness(1.2) } }
+.ai-aurora { animation:ai-drift 13s ease-in-out infinite; }
+.ai-aurora-delayed { animation:ai-drift 17s ease-in-out infinite reverse; }
+.ai-orbit { animation:ai-spin 45s linear infinite; }
+.ai-orbit-reverse { animation:ai-spin 38s linear infinite reverse; }
+.ai-core { animation:ai-breathe 6s ease-in-out infinite; }
+.ai-pulse { box-shadow:0 0 18px #67e8f9; animation:ai-breathe 2s ease-in-out infinite; }
+@media (prefers-reduced-motion:reduce) { .ai-aurora,.ai-aurora-delayed,.ai-orbit,.ai-orbit-reverse,.ai-core,.ai-pulse { animation:none; } }
+
+/* Additional home hero atmosphere; animations remain decorative. */
+.ai-stars { opacity:.6; background-image:radial-gradient(circle,#a5f3fc 1px,transparent 1.5px),radial-gradient(circle,#c4b5fd 1px,transparent 1.5px);background-size:137px 149px,211px 197px;background-position:12px 20px,71px 90px;mask-image:linear-gradient(to bottom,black,transparent); }
+.ai-holo::after { content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,transparent 32%,rgba(139,220,255,.09) 49%,transparent 66%);transform:translateX(-120%);animation:ai-sheen 9s ease-in-out infinite; }
+@keyframes ai-sheen { 0%,24% {transform:translateX(-120%)} 60%,100% {transform:translateX(120%)} }
+@keyframes ai-float { 0%,100% {transform:translateY(0)} 50% {transform:translateY(-12px)} }
+.ai-satellite,.ai-floating-label {animation:ai-float 6s ease-in-out infinite}
+.ai-satellite-delayed,.ai-floating-label-delayed {animation:ai-float 7s ease-in-out infinite reverse}
+@media(prefers-reduced-motion:reduce){.ai-holo::after,.ai-satellite,.ai-floating-label,.ai-satellite-delayed,.ai-floating-label-delayed{animation:none}}
