@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Play, Pause } from 'lucide-react';
+import { useLanguage, LanguageCode } from '@/context/LanguageContext';
 
 interface CompanyShowcaseItem {
   id: string;
   num: string;
   name: string;
-  tagline: string;
   url: string;
   localVideo: string;
   fallbackVideo: string;
@@ -15,12 +15,34 @@ interface CompanyShowcaseItem {
   fallbackPoster: string;
 }
 
+const SHOWCASE_TRANSLATIONS: Record<string, { en: string; ko: string; zh: string }> = {
+  rozena: {
+    en: 'AI virtual clothing fitting platform (AIVALAPS®) & curated soft-grunge fashion.',
+    ko: 'AI 가상 피팅 플랫폼 (AIVALAPS®) & 감각적인 소프트 그런지 패션.',
+    zh: 'AI 虚拟试衣平台 (AIVALAPS®) 与精选柔和颓废风时尚。'
+  },
+  damgara: {
+    en: 'STORYSYNC — Real-time AI facade media art transforming memories into mythic visuals.',
+    ko: 'STORYSYNC — 추억을 신화적 비주얼로 승화시키는 실시간 AI 파사드 미디어 아트.',
+    zh: 'STORYSYNC — 将记忆实时转化为神话级视觉的 AI 媒体立面艺术。'
+  },
+  nextep: {
+    en: '3D engine & AI-powered CG video production, VR/AR/MR & immersive media.',
+    ko: '3D 엔진 및 AI 기반 CG 영상 제작, VR/AR/MR 및 몰입형 실감 미디어.',
+    zh: '基于 3D 引擎与 AI 的 CG 视频制作、VR/AR/MR 及沉浸式媒体。'
+  },
+  noeul: {
+    en: 'Premium Seoul contemporary fashion label with minimalist, sensuous silhouettes.',
+    ko: '미니멀하고 감각적인 실루엣의 서울 프리미엄 컨템포러리 패션 레이블.',
+    zh: '融合极简与感性剪裁的首尔高端当代时尚品牌。'
+  }
+};
+
 const SHOWCASE_COMPANIES: CompanyShowcaseItem[] = [
   {
     id: 'rozena',
     num: '01 / 04',
     name: 'ROZENA',
-    tagline: 'AI virtual clothing fitting platform (AIVALAPS®) & curated soft-grunge fashion.',
     url: 'https://rozena.co.kr/',
     localVideo: '/videos/rozena.mp4',
     fallbackVideo: 'https://assets.mixkit.co/videos/preview/mixkit-model-posing-in-a-futuristic-silver-outfit-39871-large.mp4',
@@ -31,7 +53,6 @@ const SHOWCASE_COMPANIES: CompanyShowcaseItem[] = [
     id: 'damgara',
     num: '02 / 04',
     name: 'DAMGARA',
-    tagline: 'STORYSYNC — Real-time AI facade media art transforming memories into mythic visuals.',
     url: 'https://damgara.co.kr/',
     localVideo: '/videos/damgara.mp4',
     fallbackVideo: 'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-city-traffic-at-night-42861-large.mp4',
@@ -42,7 +63,6 @@ const SHOWCASE_COMPANIES: CompanyShowcaseItem[] = [
     id: 'nextep',
     num: '03 / 04',
     name: 'NEXTEP',
-    tagline: '3D engine & AI-powered CG video production, VR/AR/MR & immersive media.',
     url: 'https://nextep.co.kr/',
     localVideo: '/videos/nextep.mp4',
     fallbackVideo: 'https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-screens-with-code-31911-large.mp4',
@@ -53,7 +73,6 @@ const SHOWCASE_COMPANIES: CompanyShowcaseItem[] = [
     id: 'noeul',
     num: '04 / 04',
     name: 'NOEUL',
-    tagline: 'Premium Seoul contemporary fashion label with minimalist, sensuous silhouettes.',
     url: 'https://www.noeul.me/',
     localVideo: '/videos/noeul.mp4',
     fallbackVideo: 'https://assets.mixkit.co/videos/preview/mixkit-fashion-model-in-a-black-jacket-walking-in-slow-motion-41052-large.mp4',
@@ -63,6 +82,7 @@ const SHOWCASE_COMPANIES: CompanyShowcaseItem[] = [
 ];
 
 export default function CompanyVideoShowcase() {
+  const { language } = useLanguage();
   const containerRef = useRef<HTMLDivElement>(null);
   const [playingState, setPlayingState] = useState<Record<string, boolean>>({
     rozena: false,
@@ -198,7 +218,7 @@ export default function CompanyVideoShowcase() {
                 {company.name}
               </h2>
               <p className="text-xs sm:text-sm text-zinc-300 font-light leading-relaxed max-w-md">
-                {company.tagline}
+                {SHOWCASE_TRANSLATIONS[company.id]?.[language] || ''}
               </p>
             </div>
 
@@ -209,7 +229,11 @@ export default function CompanyVideoShowcase() {
               rel="noopener noreferrer"
               className="absolute bottom-[9%] left-[6%] z-20 border border-[#a38854] px-5 py-3.5 text-xs sm:text-sm font-medium tracking-wider text-[#eee7db] bg-[#08090a]/80 backdrop-blur-md hover:bg-[#a38854]/25 hover:text-white transition-all shadow-2xl focus-visible:outline-2 focus-visible:outline-[#e1b767] focus-visible:outline-offset-4"
             >
-              Explore {company.name} ↗
+              {language === 'ko'
+                ? `${company.name} 바로가기 ↗`
+                : language === 'zh'
+                ? `探索 ${company.name} ↗`
+                : `Explore ${company.name} ↗`}
             </a>
 
             {/* Video Play / Pause Toggle Button (Right) */}
@@ -238,10 +262,18 @@ export default function CompanyVideoShowcase() {
       {/* Cinematic Showcase Footer Note from Prototype */}
       <footer className="border-t border-white/10 bg-[#08090a] py-12 px-4 text-center text-xs text-[#ad9d82]">
         <p className="font-serif tracking-widest text-[#eee7db] text-sm mb-2">
-          PSK · Four companies. One vision.
+          {language === 'ko'
+            ? 'PSK · 4개의 기업. 하나의 비전.'
+            : language === 'zh'
+            ? 'PSK · 四大企业. 同一个愿景.'
+            : 'PSK · Four companies. One vision.'}
         </p>
         <p className="max-w-xl mx-auto text-[11px] text-zinc-500 leading-relaxed">
-          Original motion graphic concepts. Company names rendered as text; no official logos or company footage used.
+          {language === 'ko'
+            ? '오리지널 모션 그래픽 콘셉트입니다. 기업명은 텍스트로 표기되었으며 공식 로고나 기업 푸티지는 사용되지 않았습니다.'
+            : language === 'zh'
+            ? '原创动态视觉概念展示。公司名称以纯文本呈现，未使用官方标志或企业素材。'
+            : 'Original motion graphic concepts. Company names rendered as text; no official logos or company footage used.'}
         </p>
       </footer>
     </div>

@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { useLanguage } from '@/context/LanguageContext';
 import { ArrowDown, Target } from 'lucide-react';
 
 interface HeroSectionProps {
@@ -14,49 +13,42 @@ const VENTURES = [
   {
     num: '01',
     name: 'Rozena',
-    tag: 'AI & Fashion',
     slug: 'rozena',
     color: '#9E9E9E'
   },
   {
     num: '02',
     name: 'Damgara',
-    tag: 'Media Art',
     slug: 'damgara',
     color: '#46B1E1'
   },
   {
     num: '03',
     name: 'Nextep',
-    tag: 'CG & Immersive',
     slug: 'nextep',
     color: '#FF3333'
   },
   {
     num: '04',
     name: 'Noeul',
-    tag: 'Contemporary Fashion',
     slug: 'noeul',
     color: '#D4AF37'
   }
 ];
+
+const VENTURE_TAGS: Record<string, { en: string; ko: string; zh: string }> = {
+  rozena: { en: 'AI & Fashion', ko: 'AI & 패션', zh: 'AI 与时尚' },
+  damgara: { en: 'Media Art', ko: '미디어 아트', zh: '媒体艺术' },
+  nextep: { en: 'CG & Immersive', ko: 'CG & 몰입형 미디어', zh: 'CG 与沉浸式' },
+  noeul: { en: 'Contemporary Fashion', ko: '컨템포러리 패션', zh: '当代时尚' }
+};
 
 export default function HeroSection({
   headline = 'AI. Fashion. Content. Style.',
   subheadline = 'Four Ventures. One Vision.',
   description = 'A portfolio of specialized companies spanning AI platforms, immersive media art, next-generation CG production, and contemporary Korean fashion — each a leader in its domain.'
 }: HeroSectionProps) {
-  const [language, setLanguage] = useState<'en' | 'ko' | 'zh'>('en');
-
-  useEffect(() => {
-    const sync = () => {
-      const next = window.localStorage.getItem('psk-language');
-      if (next === 'en' || next === 'ko' || next === 'zh') setLanguage(next);
-    };
-    sync();
-    window.addEventListener('psk-language-change', sync);
-    return () => window.removeEventListener('psk-language-change', sync);
-  }, []);
+  const { language } = useLanguage();
 
   const copy = {
     en: {
@@ -66,7 +58,8 @@ export default function HeroSection({
       detail:
         description ||
         'A portfolio of specialized companies spanning AI platforms, immersive media art, next-generation CG production, and contemporary Korean fashion — each a leader in its domain.',
-      explore: 'EXPLORE OUR COMPANIES'
+      explore: 'EXPLORE OUR COMPANIES',
+      venture: 'VENTURE'
     },
     ko: {
       badge: '다각화 기업 포트폴리오',
@@ -74,7 +67,8 @@ export default function HeroSection({
       subtitle: '4개의 벤처. 하나의 비전.',
       detail:
         'AI 플랫폼, 몰입형 미디어 아트, 차세대 CG 제작, 현대 패션을 아우르는 전문 기업 포트폴리오 — 각 분야의 선두주자.',
-      explore: '계열사 살펴보기'
+      explore: '계열사 살펴보기',
+      venture: '벤처'
     },
     zh: {
       badge: '多元创新企业矩阵',
@@ -82,7 +76,8 @@ export default function HeroSection({
       subtitle: '四大企业. 同一个愿景.',
       detail:
         '涵盖 AI 平台、沉浸式媒体艺术、新一代 CG 制作与当代韩国时尚的专业企业矩阵 — 各领域的领军者。',
-      explore: '探索旗下公司'
+      explore: '探索旗下公司',
+      venture: '企业'
     }
   }[language];
 
@@ -143,10 +138,10 @@ export default function HeroSection({
               className="group block transition-transform hover:-translate-y-0.5"
             >
               <p className="text-[10px] font-mono tracking-widest text-zinc-500 uppercase mb-1">
-                VENTURE {v.num}
+                {copy.venture} {v.num}
               </p>
               <p className="text-xs font-medium text-zinc-300 group-hover:text-white transition-colors">
-                {v.name} — <span className="text-zinc-400 group-hover:text-zinc-300">{v.tag}</span>
+                {v.name} — <span className="text-zinc-400 group-hover:text-zinc-300">{VENTURE_TAGS[v.slug]?.[language] || 'Specialized Venture'}</span>
               </p>
             </a>
           ))}
