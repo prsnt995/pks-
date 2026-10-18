@@ -65,11 +65,11 @@ export default function Footer({ companies }: FooterProps) {
   return (
     <footer className="border-t border-white/10 bg-[#08090A] text-zinc-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 justify-between items-start">
           {/* Group Identity */}
-          <div className="lg:col-span-2 space-y-4">
+          <div className="space-y-4 max-w-md">
             <Logo size="md" />
-            <p className="text-xs text-zinc-400 leading-relaxed max-w-sm mt-3">
+            <p className="text-xs text-zinc-400 leading-relaxed mt-3">
               {labels.desc}
             </p>
             <div className="flex items-center gap-2 text-[11px] text-zinc-500 pt-2">
@@ -79,7 +79,7 @@ export default function Footer({ companies }: FooterProps) {
           </div>
 
           {/* Portfolio Companies */}
-          <div>
+          <div className="md:ml-auto min-w-[260px]">
             <h4 className="text-xs font-semibold uppercase tracking-widest text-zinc-200 mb-4">
               {labels.companies}
             </h4>
@@ -126,25 +126,6 @@ export default function Footer({ companies }: FooterProps) {
                   </li>
                 );
               })}
-            </ul>
-          </div>
-
-          {/* Quick Access */}
-          <div>
-            <h4 className="text-xs font-semibold uppercase tracking-widest text-zinc-200 mb-4">
-              {labels.platform}
-            </h4>
-            <ul className="space-y-2.5 text-xs">
-              <li>
-                <Link href="/companies/rozena" className="hover:text-white transition-colors">
-                  {labels.directory}
-                </Link>
-              </li>
-              <li>
-                <Link href="/studio" className="hover:text-white transition-colors">
-                  AI Video Studio
-                </Link>
-              </li>
             </ul>
           </div>
         </div>
