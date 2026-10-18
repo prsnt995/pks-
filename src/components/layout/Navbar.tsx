@@ -167,7 +167,7 @@ export default function Navbar() {
                 >
                   {/* Company Name Button */}
                   <Link
-                    href={`/companies/${co.slug}`}
+                    href={pathname === '/' ? `/#${co.slug}` : `/companies/${co.slug}`}
                     className={`group/btn flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-200 ${
                       isCurrentCompany
                         ? 'text-white bg-white/15 border border-white/20 shadow-sm'

@@ -1,6 +1,7 @@
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import HeroSection from '@/components/home/HeroSection';
+import CompanyVideoShowcase from '@/components/home/CompanyVideoShowcase';
 import CompaniesSection from '@/components/home/CompaniesSection';
 import { getCompanies, getSiteSettings } from '@/lib/db';
 
@@ -23,6 +24,10 @@ export default async function HomePage() {
           description={settings.hero_description}
         />
 
+        {/* Cinematic Video Showcase for the 4 Companies */}
+        <CompanyVideoShowcase />
+
+        {/* Detailed Portfolio Directory */}
         <CompaniesSection companies={activeCompanies} />
       </main>
 
