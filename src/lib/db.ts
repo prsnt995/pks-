@@ -89,20 +89,34 @@ export async function getCompanies(): Promise<Company[]> {
         .from('companies')
         .select('*')
         .order('display_order', { ascending: true });
-      if (!error && data) return data as Company[];
+      if (!error && data && data.length > 0) {
+        const slugs = new Set(data.map((c) => c.slug.toLowerCase()));
+        const missing = INITIAL_COMPANIES.filter((c) => !slugs.has(c.slug.toLowerCase()));
+        return [...data, ...missing].sort((a, b) => a.display_order - b.display_order);
+      }
     } catch {
       // Fallback to local storage
     }
   }
   const companies = readJsonFile<Company[]>('companies.json', INITIAL_COMPANIES);
-  return companies.sort((a, b) => a.display_order - b.display_order);
+  const slugs = new Set(companies.map((c) => c.slug.toLowerCase()));
+  const missing = INITIAL_COMPANIES.filter((c) => !slugs.has(c.slug.toLowerCase()));
+  return [...companies, ...missing].sort((a, b) => a.display_order - b.display_order);
 }
 
 export async function getCompanyBySlug(slug: string): Promise<Company | null> {
   const companies = await getCompanies();
   const normalized = slug.toLowerCase();
+  const found = companies.find(
+    (c) =>
+      c.slug.toLowerCase() === normalized ||
+      (normalized === 'nextep' && (c.slug === 'nextepstudio' || c.slug === 'nextep')) ||
+      (normalized === 'nextepstudio' && (c.slug === 'nextep' || c.slug === 'nextepstudio'))
+  );
+  if (found) return found;
+
   return (
-    companies.find(
+    INITIAL_COMPANIES.find(
       (c) =>
         c.slug.toLowerCase() === normalized ||
         (normalized === 'nextep' && (c.slug === 'nextepstudio' || c.slug === 'nextep')) ||
@@ -189,12 +203,14 @@ export async function getProjects(): Promise<Project[]> {
   if (supabase) {
     try {
       const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
-      if (!error && data) return data as Project[];
+      if (!error && data && data.length > 0) return data as Project[];
     } catch {
       // Fallback
     }
   }
-  return readJsonFile<Project[]>('projects.json', INITIAL_PROJECTS);
+  const projects = readJsonFile<Project[]>('projects.json', INITIAL_PROJECTS);
+  if (!projects || projects.length === 0) return INITIAL_PROJECTS;
+  return projects;
 }
 
 export async function saveProject(project: Partial<Project> & { title: string; company_id: string }): Promise<Project> {
