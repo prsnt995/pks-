@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Logo from '@/components/brand/Logo';
 import { Company } from '@/types';
+import { INITIAL_COMPANIES } from '@/lib/data/initial-data';
 import { ArrowUpRight } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -50,6 +51,17 @@ export default function Footer({ companies }: FooterProps) {
     }
   }[language];
 
+  // Strictly filter out legacy companies and guarantee all 4 real companies are present
+  const validSlugs = new Set(['rozena', 'damgara', 'nextep', 'noeul']);
+  const filtered = (companies || []).filter((c) => validSlugs.has(c.slug.toLowerCase()));
+  const presentSlugs = new Set(filtered.map((c) => c.slug.toLowerCase()));
+  const missing = INITIAL_COMPANIES.filter(
+    (c) => validSlugs.has(c.slug.toLowerCase()) && !presentSlugs.has(c.slug.toLowerCase())
+  );
+  const displayCompanies = [...filtered, ...missing].sort(
+    (a, b) => (a.display_order || 0) - (b.display_order || 0)
+  );
+
   return (
     <footer className="border-t border-white/10 bg-[#08090A] text-zinc-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -72,33 +84,44 @@ export default function Footer({ companies }: FooterProps) {
               {labels.companies}
             </h4>
             <ul className="space-y-2.5 text-xs">
-              {companies.map((c) => {
+              {displayCompanies.map((c) => {
                 const isVerified = Boolean(
                   c.website_verified && c.official_url && c.official_url.trim().length > 0
                 );
+                const colorMap: Record<string, string> = {
+                  rozena: '#9E9E9E',
+                  damgara: '#46B1E1',
+                  nextep: '#FF3333',
+                  noeul: '#D4AF37',
+                };
+                const brandColor = colorMap[c.slug.toLowerCase()] || c.brand_color || '#FFFFFF';
+
                 return (
-                  <li key={c.id}>
-                    {isVerified ? (
+                  <li key={c.id || c.slug} className="flex items-center justify-between group">
+                    <Link
+                      href={`/companies/${c.slug}`}
+                      className="text-zinc-400 hover:text-white transition-colors inline-flex items-center gap-2"
+                    >
+                      <span
+                        className="w-1.5 h-1.5 rounded-full flex-shrink-0 transition-transform group-hover:scale-125"
+                        style={{ backgroundColor: brandColor }}
+                      />
+                      <span>{c.name}</span>
+                      <span className="text-[10px] text-zinc-500 font-mono px-1.5 py-0.2 rounded bg-white/5 border border-white/5 group-hover:text-zinc-300 group-hover:border-white/10 transition-colors">
+                        {labels.profile}
+                      </span>
+                    </Link>
+                    {isVerified && (
                       <a
                         href={c.official_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-zinc-400 hover:text-white transition-colors inline-flex items-center gap-1 group"
+                        className="text-zinc-500 hover:text-white transition-colors p-0.5 ml-1"
                         aria-label={`Visit official website for ${c.name} (opens in new tab)`}
+                        title={`Visit official website (${c.official_url})`}
                       >
-                        <span>{c.name}</span>
                         <ArrowUpRight className="w-3 h-3 text-zinc-500 group-hover:text-white transition-colors" />
                       </a>
-                    ) : (
-                      <Link
-                        href={`/companies/${c.slug}`}
-                        className="text-zinc-400 hover:text-white transition-colors inline-flex items-center gap-1.5"
-                      >
-                        <span>{c.name}</span>
-                        <span className="text-[10px] text-zinc-500 font-mono px-1.5 py-0.2 rounded bg-white/5 border border-white/5">
-                          {labels.profile}
-                        </span>
-                      </Link>
                     )}
                   </li>
                 );
@@ -115,6 +138,11 @@ export default function Footer({ companies }: FooterProps) {
               <li>
                 <Link href="/companies/rozena" className="hover:text-white transition-colors">
                   {labels.directory}
+                </Link>
+              </li>
+              <li>
+                <Link href="/studio" className="hover:text-white transition-colors">
+                  AI Video Studio
                 </Link>
               </li>
             </ul>

@@ -21,6 +21,25 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  async redirects() {
+    return [
+      {
+        source: '/companies/pks-eng',
+        destination: '/companies/rozena',
+        permanent: true,
+      },
+      {
+        source: '/companies/nextepstudio',
+        destination: '/companies/nextep',
+        permanent: true,
+      },
+      {
+        source: '/companies/to-be-announced',
+        destination: '/companies/noeul',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

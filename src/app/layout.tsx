@@ -27,16 +27,18 @@ export const metadata: Metadata = {
     template: "%s | NEXORA GROUP",
   },
   description:
-    "A modern multi-venture corporate portfolio uniting engineering, digital innovation, creative services, and AI media production.",
+    "A modern multi-venture corporate portfolio uniting AI platforms, immersive media art, 3D CG production, and contemporary Korean fashion.",
   keywords: [
     "NEXORA GROUP",
-    "PKS.ENG",
-    "Nextepstudio",
     "Rozena",
+    "Damgara",
+    "Nextep",
+    "Noeul",
     "Corporate Portfolio",
-    "Engineering Systems",
-    "Digital Studio",
-    "AI Video Generation"
+    "AI Fashion Technology",
+    "Interactive Media Art",
+    "3D CG Production",
+    "Contemporary Korean Fashion"
   ],
   authors: [{ name: "NEXORA GROUP" }],
   openGraph: {

@@ -37,6 +37,10 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
+  if (slug === 'nextepstudio') return { title: 'NEXTEP — Digital Content & Immersive Technology | NEXORA GROUP' };
+  if (slug === 'pks-eng') return { title: 'ROZENA — AI Fashion & Creative Technology | NEXORA GROUP' };
+  if (slug === 'to-be-announced') return { title: 'NOEUL — Contemporary Korean Fashion | NEXORA GROUP' };
+
   const company = await getCompanyBySlug(slug);
   if (!company) {
     return { title: 'Company Not Found — NEXORA GROUP' };
@@ -63,9 +67,15 @@ export default async function CompanyDetailPage({
 }) {
   const { slug } = await params;
 
-  // Handle nextepstudio alias redirect to nextep
+  // Handle legacy slug aliases redirecting to active ventures
   if (slug === 'nextepstudio') {
     redirect('/companies/nextep');
+  }
+  if (slug === 'pks-eng') {
+    redirect('/companies/rozena');
+  }
+  if (slug === 'to-be-announced') {
+    redirect('/companies/noeul');
   }
 
   const [company, allCompanies, allProjects] = await Promise.all([

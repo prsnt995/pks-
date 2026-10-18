@@ -107,20 +107,27 @@ export async function getCompanies(): Promise<Company[]> {
 export async function getCompanyBySlug(slug: string): Promise<Company | null> {
   const companies = await getCompanies();
   const normalized = slug.toLowerCase();
+
+  // Resolve legacy aliases
+  let targetSlug = normalized;
+  if (normalized === 'nextepstudio') targetSlug = 'nextep';
+  if (normalized === 'pks-eng') targetSlug = 'rozena';
+  if (normalized === 'to-be-announced') targetSlug = 'noeul';
+
   const found = companies.find(
     (c) =>
+      c.slug.toLowerCase() === targetSlug ||
       c.slug.toLowerCase() === normalized ||
-      (normalized === 'nextep' && (c.slug === 'nextepstudio' || c.slug === 'nextep')) ||
-      (normalized === 'nextepstudio' && (c.slug === 'nextep' || c.slug === 'nextepstudio'))
+      (normalized === 'nextep' && (c.slug === 'nextepstudio' || c.slug === 'nextep'))
   );
   if (found) return found;
 
   return (
     INITIAL_COMPANIES.find(
       (c) =>
+        c.slug.toLowerCase() === targetSlug ||
         c.slug.toLowerCase() === normalized ||
-        (normalized === 'nextep' && (c.slug === 'nextepstudio' || c.slug === 'nextep')) ||
-        (normalized === 'nextepstudio' && (c.slug === 'nextep' || c.slug === 'nextepstudio'))
+        (normalized === 'nextep' && (c.slug === 'nextepstudio' || c.slug === 'nextep'))
     ) || null
   );
 }

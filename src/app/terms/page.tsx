@@ -32,7 +32,7 @@ export default async function TermsPage() {
           <section className="space-y-2">
             <h2 className="text-base font-bold text-white">1. Brand & Portfolio Representation</h2>
             <p>
-              NEXORA GROUP is a corporate brand and business portfolio that showcases four independent commercial ventures (PKS.ENG, Nextepstudio, Rozena, and emerging stealth initiatives). Unless specifically noted, member ventures operate under independent business registrations and commercial agreements.
+              NEXORA GROUP is a corporate brand and business portfolio that showcases four independent commercial ventures (Rozena, Damgara, Nextep, and Noeul). Unless specifically noted, member ventures operate under independent business registrations and commercial agreements.
             </p>
           </section>
 
