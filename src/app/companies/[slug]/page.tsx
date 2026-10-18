@@ -1,4 +1,5 @@
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
+export const dynamicParams = true;
 
 import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
@@ -19,6 +20,16 @@ import {
   ChevronRight
 } from 'lucide-react';
 import type { Metadata } from 'next';
+
+export async function generateStaticParams() {
+  return [
+    { slug: 'rozena' },
+    { slug: 'damgara' },
+    { slug: 'nextep' },
+    { slug: 'noeul' },
+    { slug: 'nextepstudio' },
+  ];
+}
 
 export async function generateMetadata({
   params

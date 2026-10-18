@@ -19,40 +19,52 @@ import {
 } from './data/initial-data';
 import { createClient } from '@supabase/supabase-js';
 
-const DATA_DIR = path.join(process.cwd(), '.data');
+const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+const DATA_DIR = isServerless
+  ? path.join('/tmp', '.data')
+  : path.join(process.cwd(), '.data');
 
-function ensureDataDir() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
+function ensureDataDir(): boolean {
+  try {
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    return true;
+  } catch {
+    return false;
   }
 }
 
 function readJsonFile<T>(filename: string, defaultValue: T): T {
-  ensureDataDir();
-  const filePath = path.join(DATA_DIR, filename);
   try {
+    const filePath = path.join(DATA_DIR, filename);
     if (!fs.existsSync(filePath)) {
-      fs.writeFileSync(filePath, JSON.stringify(defaultValue, null, 2), 'utf-8');
+      if (ensureDataDir()) {
+        try {
+          fs.writeFileSync(filePath, JSON.stringify(defaultValue, null, 2), 'utf-8');
+        } catch {
+          // Read-only filesystem fallback
+        }
+      }
       return defaultValue;
     }
     const data = fs.readFileSync(filePath, 'utf-8');
     return JSON.parse(data) as T;
   } catch (err) {
-    console.error(`Error reading ${filename}, using default:`, err);
+    console.warn(`Could not read ${filename}, using default:`, err);
     return defaultValue;
   }
 }
 
 function writeJsonFile<T>(filename: string, data: T): void {
-  ensureDataDir();
-  const filePath = path.join(DATA_DIR, filename);
-  const temporaryPath = `${filePath}.${randomUUID()}.tmp`;
   try {
+    if (!ensureDataDir()) return;
+    const filePath = path.join(DATA_DIR, filename);
+    const temporaryPath = `${filePath}.${randomUUID()}.tmp`;
     fs.writeFileSync(temporaryPath, JSON.stringify(data, null, 2), 'utf-8');
     fs.renameSync(temporaryPath, filePath);
   } catch (err) {
-    if (fs.existsSync(temporaryPath)) fs.unlinkSync(temporaryPath);
-    throw err;
+    console.warn(`Could not write ${filename}:`, err);
   }
 }
 

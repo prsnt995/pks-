@@ -32,9 +32,10 @@ const LanguageContext = createContext<LanguageContextType>({
 let currentLanguage: LanguageCode = 'en';
 
 function readLanguage(): LanguageCode {
+  if (typeof window === 'undefined') return 'en';
   try {
-    const saved = localStorage.getItem('psk-language');
-    if (saved === 'en' || saved === 'ko' || saved === 'zh') return saved;
+    const saved = window.localStorage.getItem('psk-language');
+    if (saved === 'en' || saved === 'ko' || saved === 'zh') return saved as LanguageCode;
   } catch {
     // Keep the in-memory selection when browser storage is unavailable.
   }
@@ -42,9 +43,13 @@ function readLanguage(): LanguageCode {
 }
 
 function subscribe(onChange: () => void) {
+  if (typeof window === 'undefined') return () => {};
   const onStorage = (event: StorageEvent) => {
     if (event.key === 'psk-language' || event.key === null) {
-      currentLanguage = 'en';
+      const next = event.newValue as LanguageCode | null;
+      if (next === 'en' || next === 'ko' || next === 'zh') {
+        currentLanguage = next;
+      }
       onChange();
     }
   };
@@ -62,12 +67,14 @@ const serverMounted = () => false;
 
 function setLanguage(newLang: LanguageCode) {
   currentLanguage = newLang;
-  try {
-    localStorage.setItem('psk-language', newLang);
-  } catch {
-    // The selection still works for this page session.
+  if (typeof window !== 'undefined') {
+    try {
+      window.localStorage.setItem('psk-language', newLang);
+    } catch {
+      // The selection still works for this page session.
+    }
+    window.dispatchEvent(new Event('psk-language-change'));
   }
-  window.dispatchEvent(new Event('psk-language-change'));
 }
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
