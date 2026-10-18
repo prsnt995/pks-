@@ -113,7 +113,7 @@ export default function Footer({ companies }: FooterProps) {
             </h4>
             <ul className="space-y-2.5 text-xs">
               <li>
-                <Link href="/#companies" className="hover:text-white transition-colors">
+                <Link href="/#showcase" className="hover:text-white transition-colors">
                   {labels.directory}
                 </Link>
               </li>
