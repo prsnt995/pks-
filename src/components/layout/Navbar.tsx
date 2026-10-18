@@ -10,7 +10,6 @@ import {
   ArrowUpRight, 
   ExternalLink, 
   Globe,
-  Shield,
   ChevronDown,
   Check
 } from 'lucide-react';
@@ -200,7 +199,6 @@ export default function Navbar() {
 
   const homeLabel = language === 'ko' ? '홈' : language === 'zh' ? '首页' : 'Home';
   const companiesLabel = language === 'ko' ? '계열사' : language === 'zh' ? '旗下公司' : 'Our Companies';
-  const adminLabel = language === 'ko' ? '관리자' : language === 'zh' ? '管理后台' : 'Admin';
   const websiteLabel = language === 'ko' ? '웹사이트' : language === 'zh' ? '官方网站' : 'Website';
   const profileLabel = language === 'ko' ? '소개' : language === 'zh' ? '简介' : 'Profile';
 
@@ -364,16 +362,9 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* Right Header Actions: Language Switcher & Admin */}
-          <div className="hidden md:flex items-center gap-2.5">
+          {/* Right Header Actions: Language Switcher */}
+          <div className="hidden md:flex items-center">
             <LanguageButton />
-            <Link
-              href="/admin"
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium text-zinc-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 transition-colors"
-            >
-              <Shield className="w-3.5 h-3.5 text-zinc-400" />
-              <span>{adminLabel}</span>
-            </Link>
           </div>
 
           {/* Mobile Actions & Menu Trigger */}
@@ -463,21 +454,11 @@ export default function Navbar() {
                 </div>
               </div>
 
-              {/* Mobile Drawer Bottom: Language Selector & Admin */}
-              <div className="pt-2 border-t border-white/10 space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400">
-                    {language === 'ko' ? '언어 선택' : language === 'zh' ? '语言' : 'Language'}
-                  </span>
-                  <Link
-                    href="/admin"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-zinc-300 hover:text-white bg-white/[0.04] border border-white/10"
-                  >
-                    <Shield className="w-3.5 h-3.5 text-zinc-400" />
-                    <span>{adminLabel}</span>
-                  </Link>
-                </div>
+              {/* Mobile Drawer Bottom: Language Selector */}
+              <div className="pt-2 border-t border-white/10 space-y-2">
+                <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 block px-1">
+                  {language === 'ko' ? '언어 선택' : language === 'zh' ? '语言' : 'Language'}
+                </span>
                 {/* Segmented language selector */}
                 <div className="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-white/[0.04] border border-white/10">
                   {LANGUAGES.map((l) => {

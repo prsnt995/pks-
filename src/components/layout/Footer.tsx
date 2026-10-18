@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Logo from '@/components/brand/Logo';
 import { Company } from '@/types';
-import { ArrowUpRight, Lock } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
 
 interface FooterProps {
@@ -22,7 +22,6 @@ export default function Footer({ companies }: FooterProps) {
       profile: 'Profile',
       platform: 'Platform',
       directory: 'Company Directory',
-      admin: 'Admin Portal',
       rights: 'All rights reserved. Corporate portfolio and multi-venture digital platform.',
       privacy: 'Privacy Policy',
       terms: 'Terms of Service'
@@ -34,7 +33,6 @@ export default function Footer({ companies }: FooterProps) {
       profile: '소개',
       platform: '플랫폼',
       directory: '기업 디렉터리',
-      admin: '관리자 포털',
       rights: '모든 권리 보유. 기업 포트폴리오 및 멀티 벤처 디지털 플랫폼.',
       privacy: '개인정보 처리방침',
       terms: '이용약관'
@@ -46,7 +44,6 @@ export default function Footer({ companies }: FooterProps) {
       profile: '简介',
       platform: '平台',
       directory: '企业名录',
-      admin: '管理后台',
       rights: '版权所有。企业投资组合与多元创新数字化平台。',
       privacy: '隐私政策',
       terms: '服务条款'
@@ -118,15 +115,6 @@ export default function Footer({ companies }: FooterProps) {
               <li>
                 <Link href="/#companies" className="hover:text-white transition-colors">
                   {labels.directory}
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/admin"
-                  className="hover:text-white transition-colors inline-flex items-center gap-1 text-zinc-500"
-                >
-                  <Lock className="w-3 h-3" />
-                  <span>{labels.admin}</span>
                 </Link>
               </li>
             </ul>
